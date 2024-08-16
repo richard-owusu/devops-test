@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dockertest-deployment
+  labels:
+    app: dockertest
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dockertest
+  template:
+    metadata:
+      labels:
+        app: dockertest
+    spec:
+      containers:
+      - name: dockertest
+        image: rowusu/my-app-richard:1.0
+        ports:
+        - containerPort: 3000
+  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockertest-service
+spec:
+  type: NodePort
+  selector:
+    app: dockertest
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30300
+
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: dockertest-service
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: dockertest
+#   ports:
+#     - port: 3000
+#       targetPort: 3000
